@@ -1,6 +1,13 @@
 import express from 'express';
+import { Lucia } from 'lucia';
+import { luciaPrismaAdapter, prismaClient } from './db';
 
+// Variables
 const port = 3000;
+
+// Lucia
+const lucia = new Lucia(luciaPrismaAdapter);
+const db = prismaClient;
 
 const app = express();
 
