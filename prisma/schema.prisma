@@ -13,6 +13,14 @@ datasource db {
 model User {
   id       String    @id
   sessions Session[]
+  email    String
+  nickName String
+  pwd      String
+
+  Order Order[]
+  OrderLog OrderLog[]
+  FillLog FillLog[]
+  FeeLog FeeLog[]
 }
 
 model Session {
@@ -21,4 +29,81 @@ model Session {
   expiresAt DateTime
 
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Order {
+  id        String   @id
+  userId    String
+  // BTC/USDT
+  symbol    String
+  // hanging | fullfilled | canceled
+  status    String
+  // market | limit | plan
+  orderType String
+  orderAmount    Float
+  filledAmount   Float
+  orderPrice     Float
+  filledPrice    Float
+  filledValue    Float
+
+  // Order Detail
+  fee            Float
+  created        DateTime
+
+  // Fill Detail
+  fillTime       DateTime
+
+  user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
+
+  OrderLog OrderLog[]
+  FillLog FillLog[]
+  FeeLog FeeLog[]
+}
+
+// 下订单的 Log
+model OrderLog {
+  id        String   @id
+  userId    String
+  orderId   String
+
+  symbol    String
+  orderType String
+  orderAmount    Float
+  orderPrice     Float
+  created        DateTime
+  fee            Float
+
+  user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
+  order     Order    @relation(references: [id], fields: [orderId], onDelete: Restrict)
+}
+
+// 满足订单的 Log
+model FillLog {
+  id        String   @id
+  userId    String
+  orderId   String
+
+  symbol    String
+  filledAmount   Float
+  filledPrice    Float
+  filledValue    Float
+  created        DateTime
+  fee            Float
+
+
+  user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
+  order     Order    @relation(references: [id], fields: [orderId], onDelete: Restrict)
+}
+
+model FeeLog {
+  id        String   @id
+  userId    String
+  orderId   String
+
+  // makeOrderFee | fullfillOrderFee | fundingFee
+  feeType   String
+  amount    Float
+
+  user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
+  order     Order    @relation(references: [id], fields: [orderId], onDelete: Restrict)
 }
