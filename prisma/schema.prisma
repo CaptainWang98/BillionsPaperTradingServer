@@ -12,11 +12,11 @@ datasource db {
 
 model User {
   id       String    @id
-  sessions Session[]
-  email    String
-  nickName String
+  email    String?
+  username String
   pwd      String
 
+  sessions Session[]
   Order Order[]
   OrderLog OrderLog[]
   FillLog FillLog[]
@@ -106,4 +106,14 @@ model FeeLog {
 
   user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
   order     Order    @relation(references: [id], fields: [orderId], onDelete: Restrict)
+}
+
+model Period {
+  id        String   @id
+  symble    String
+  startTime DateTime
+  endTime   DateTime
+
+  // JSON Array
+  userIds   String
 }
