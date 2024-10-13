@@ -46,7 +46,7 @@ signupRouter.post("/signup", async (req, res) => {
 	const userId = generateId(15);
 
 	try {
-    prismaClient.user.create({
+    await prismaClient.user.create({
 			data: {
 				id: userId,
 				username,
@@ -61,11 +61,13 @@ signupRouter.post("/signup", async (req, res) => {
 			.redirect("/");
 	} catch (e) {
 		if (e instanceof Prisma.PrismaClientKnownRequestError) {
+			console.log('PrismaClientKnownRequestError', e);
 			return res.setHeader("Content-Type", "text/html").status(400).send({
 				code: DB_ERROR,
 				msg: e.message
 			});
 		}
+		console.log('Unknown error', e);
 		return res.setHeader("Content-Type", "text/html").status(500).send({
 			code: UNKNOWN_ERROR,
 			msg: 'Unknown error occured, please contact developer!'

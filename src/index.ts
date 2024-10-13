@@ -1,13 +1,16 @@
 import express from 'express';
-import { lucia } from './auth';
-// import { verifyRequestOrigin } from "lucia";
-import { signupRouter } from './router/signup';
+import { lucia } from './auth.ts';
+import { verifyRequestOrigin } from "lucia";
+import { signupRouter } from './router/signup.ts';
+import morgan from 'morgan';
 
 // Variables
 const port = 3000;
 
 const app = express();
+
 app.use(express.urlencoded());
+app.use(morgan('combined'));
 
 app.use(async (req, res, next) => {
 	if (req.method === "GET") {
@@ -15,8 +18,8 @@ app.use(async (req, res, next) => {
 	}
 	const originHeader = req.headers.origin ?? null;
 	const hostHeader = req.headers.host ?? null;
-  const { verifyRequestOrigin } = await import("lucia");
-	if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
+
+	if ((!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) && !hostHeader.includes('localhost')) {
 		return res.status(403).end();
 	}
 	return next();
