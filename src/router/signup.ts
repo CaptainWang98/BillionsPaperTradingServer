@@ -6,7 +6,7 @@ import { generateId } from "lucia";
 import { DB_ERROR, INVALID_SIGNUP_DATA, UNKNOWN_ERROR } from "../vars.js";
 import { Prisma } from "@prisma/client"
 
-export const signupRouter = express.Router();
+const signupRouter = express.Router();
 
 signupRouter.get("/signup", async (_, res) => {
 	if (res.locals.session) {
@@ -74,3 +74,5 @@ signupRouter.post("/signup", async (req, res) => {
 		});
 	}
 });
+
+export default signupRouter;
