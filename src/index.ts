@@ -3,6 +3,8 @@ import { lucia } from './auth.ts';
 import { verifyRequestOrigin } from "lucia";
 import signupRouter from './router/signup.ts';
 import klinesRouter from './router/klines.ts';
+import ordersRouter from './router/orders.ts';
+import loginRouter from './router/login.ts';
 import morgan from 'morgan';
 
 // Variables
@@ -14,7 +16,6 @@ app.use(express.urlencoded());
 app.use(morgan('combined'));
 
 app.use(async (req, res, next) => {
-	console.log('11');
 	if (req.method === "GET") {
 		return next();
 	}
@@ -28,7 +29,6 @@ app.use(async (req, res, next) => {
 });
 
 app.use(async (req, res, next) => {
-	console.log('22');
 	const sessionId = lucia.readSessionCookie(req.headers.cookie ?? "");
 	if (!sessionId) {
 		res.locals.user = null;
@@ -48,8 +48,10 @@ app.use(async (req, res, next) => {
 	return next();
 });
 
+app.use(loginRouter);
 app.use(signupRouter);
 app.use(klinesRouter);
+app.use(ordersRouter);
 
 app.listen(port, function () {
   console.log('Server running on port ' + port + '!');
