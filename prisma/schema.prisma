@@ -117,3 +117,20 @@ model Period {
   // JSON Array
   userIds   String
 }
+
+model Ohlcv {
+  symbol_id         String
+  period            String
+  time_period_start DateTime
+  time_period_end   DateTime
+  time_open         DateTime?
+  time_close        DateTime?
+  price_open        Float?
+  price_high        Float?
+  price_low         Float?
+  price_close       Float?
+  volume_traded     Float
+  trades_count      Int
+
+  @@id([period, time_period_start])
+}
