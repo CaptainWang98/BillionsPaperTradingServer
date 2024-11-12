@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon ./src/index.ts"
+    "start": "nodemon ./src/index.ts",
+    "testtt": "nodemon ./src/testtt.ts"
   },
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^4.0.1",

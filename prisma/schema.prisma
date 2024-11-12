@@ -32,26 +32,26 @@ model Session {
 }
 
 model Order {
-  id        String   @id
+  id        String   @id @default(cuid())
   userId    String
   // BTC/USDT
   symbol    String
-  // hanging | fullfilled | canceled
+  // hanging | fullfilled | canceled | finished
   status    String
   // market | limit | plan
   orderType String
   orderAmount    Float
-  filledAmount   Float
+  filledAmount   Float?
   orderPrice     Float
-  filledPrice    Float
-  filledValue    Float
+  filledPrice    Float?
+  filledValue    Float?
 
   // Order Detail
-  fee            Float
-  created        DateTime
+  fee            Float?
+  created        DateTime @default(now())
 
   // Fill Detail
-  fillTime       DateTime
+  fillTime       DateTime?
 
   user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
 
@@ -70,7 +70,7 @@ model OrderLog {
   orderType String
   orderAmount    Float
   orderPrice     Float
-  created        DateTime
+  created        DateTime @default(now())
   fee            Float
 
   user      User     @relation(references: [id], fields: [userId], onDelete: Restrict)
@@ -87,7 +87,7 @@ model FillLog {
   filledAmount   Float
   filledPrice    Float
   filledValue    Float
-  created        DateTime
+  created        DateTime @default(now())
   fee            Float
 
 
